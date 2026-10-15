@@ -1,0 +1,82 @@
+{% extends 'students/base.html' %}
+
+{% block content %}
+<div class="row">
+    {% csrf_token %}
+    <div class="col">
+      <input type="text" placeholder="Search..." id="search" class="form-control">  
+    </div>
+    <div class="col">
+    <button class="btn btn-primary" onclick="search()">Search</button>
+    </div>
+    </div>
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Course</th>
+        </tr>
+        </thead>
+        <tbody id="result">
+            {% for c in course %}
+        <tr>
+            <th scope="col">{{c.id}}</th>
+            <td>{{c.name}}</td>
+           
+        </tr>
+        {% endfor %}
+    </tbody>
+    </table>
+    <div class="row">
+    <div class="col">
+    <input type="text" placeholder="Add_course" class="form-control" id="course">
+    </div>
+    <div class="col">
+    <button class="btn btn-primary" onclick="submit()">Add</button>
+    </div>
+    </div>
+    <script>
+
+        let a = 5;
+        console.log('the value of a is', a)
+        function search() {
+            const course_id = document.getElementById("search").value;
+
+            console.log('searching...')
+            console.log(course_id)
+
+
+            fetch(`/course/get/${course_id}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error ('course not found')
+                    }
+                     return response.json()
+                })
+                .then(data => {
+                    document.getElementById("result").innerHTML = `<tr><th scope='col'>${data.id}</th><td>${data.name}</td></tr>`
+                })
+                .catch(error => console.error('error fetching course:',error))
+
+        }
+        
+        function submit (){
+            const course = document.getElementById("course").value;
+
+            console.log(course)
+        
+            fetch('/course-data/add/',{
+                method: 'POST',
+                headers : {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: JSON.stringify({ name: course})
+            })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById("result").innerHTML += `<tr><th scope='col'>${data.id}</th><td>${data.name}</td></tr>`
+                })
+        }
+    </script>
+    {% endblock%}

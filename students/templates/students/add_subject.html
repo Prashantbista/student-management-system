@@ -1,0 +1,15 @@
+{% extends 'students/base.html' %}
+
+    {% block content %}
+    <h1>{{header}}</h1>
+    <form method="POST" action="">
+        {% csrf_token %}
+        <div class="mb-3">
+    <label for="name" class="form-label">Subject</label>
+    <input type="text"  name="subject" class="form-control" id="subject">
+    <div id="emailHelp" class="form-text"></div>
+  </div>
+        
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+        {% endblock %}

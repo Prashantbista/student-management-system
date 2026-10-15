@@ -1,0 +1,23 @@
+{% extends 'students/base.html' %}
+    {% block styles %}
+       <style>
+        table, th, td {
+        border: 1px solid black;
+        border-collapse: collapse;
+        }
+        </style>
+        {% endblock %}
+{% block content %}
+    <h1>{{header}}</h1>
+    <p>{{paragraph}}</p>
+    <table>
+        <tr>
+            <th>Subject</th>
+        </tr>
+        {% for std in subject %}
+        <tr>
+            <td>{{std.name}}</td>
+        </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
