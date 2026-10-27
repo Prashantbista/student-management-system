@@ -20,7 +20,7 @@ from django.contrib.auth import views as auth_views
 from drf_spectacular.views import (SpectacularAPIView,SpectacularSwaggerView,SpectacularRedocView)
 from django.contrib import admin
 from django.urls import path, include
-from students.views import home,list_students,get_course,add_coursedata,add_student,view_student,list_Course,add_course,list_subject,add_subject,delete_student,delete_course,edit_student 
+from students.views import ai_chat,home,list_students,get_course,add_coursedata,add_student,view_student,list_Course,add_course,list_subject,add_subject,delete_student,delete_course,edit_student 
 from aboutus.views import about
 from accounts.views import register,profile
 
@@ -51,6 +51,7 @@ urlpatterns = [
     path("api/schema/",SpectacularAPIView.as_view(),name="schema",),
     path("api/docs/",SpectacularSwaggerView.as_view(url_name="schema"),name="swagger-ui",),
     path("api/redoc/",SpectacularRedocView.as_view(url_name="schema"),name="redoc",),
+    path("ai-chat/", ai_chat, name="ai_chat"),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

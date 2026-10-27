@@ -1,13 +1,45 @@
 from django.shortcuts import render,redirect
 from.models import Student
 from.models import Course
-from.models import Subject
-from .forms import StudentForm
+from.models import AIConversation, Subject
+from.ai_servies import  ask_ai
+from .forms import  StudentForm
 import json
 
 
 # Create your views here.
 from django.http import HttpResponse, JsonResponse
+
+
+def ai_chat (request):
+    answer=""
+    error=""
+    question=""
+
+    if request.method == "POST":
+        question = request.POST.get("question","").strip()
+        if question:
+            try:
+                answer= ask_ai(question)
+                AIConversation.objects.create(question=question,answer=answer)
+            except Exception:
+                error = "Sorry, the AI service is unavailable"
+
+    converations=AIConversation.objects.order_by("-created_at")
+    context = {
+        'titile':'Ai chat Program',
+        'header':'Ai chat Asssitent',
+        'answer':answer,
+        'error':error,
+        'question':question,
+        'converstions':converations
+    }
+    return render(request,"students/ai_chat.html",context)
+
+
+
+
+
 def add_coursedata(requset):
     if requset.method == "POST":
         requset_data = json.loads(requset.body)
